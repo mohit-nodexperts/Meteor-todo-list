@@ -1,7 +1,11 @@
 <body>
   <div class="container">
     <header>
-      <h1><span class="glyphicon glyphicon-th-list"></span> &nbsp;Todo List</h1>
+      <h1><span class="glyphicon glyphicon-th-list"></span> &nbsp;Todo List - Not Done : {{incompleteCount}} Out Of {{completeCount}}</h1>
+      <label class="hide-completed">
+        <input type="checkbox" />
+        Hide Completed Tasks
+      </label>
     </header>
     <form class="new-task">
       <input type="text" name="text" placeholder="Add New Task"/>
