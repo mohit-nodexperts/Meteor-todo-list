@@ -6,8 +6,6 @@ import { Tasks } from '../api/tasks.js';
  
 import './task.html';
 
-
-
 Template.task.helpers({
 isOwner()
 {
