@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
+var moment = require('moment')
 export const Tasks = new Mongo.Collection('tasks');
 
 if(Meteor.isServer)
@@ -26,7 +27,7 @@ Meteor.methods({
    
       Tasks.insert({
         text,
-        createdAt: new Date(),
+        createdAt: moment(),
         owner: Meteor.userId(),
         username: Meteor.user().username,
       });
@@ -52,5 +53,11 @@ Meteor.methods({
        return Meteor.Error("Unauthorised User");
 
        Tasks.update(taskId, { $set : {private : setPrivate}});
+    },
+    'tasks.isDue'(taskId,setDue){
+        check(taskId,String);
+        check(setDue,Boolean);
+
+        Tasks.update(taskId,{ $set : {late : setDue}});
     },
   });

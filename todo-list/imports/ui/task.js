@@ -6,10 +6,21 @@ import { Tasks } from '../api/tasks.js';
  
 import './task.html';
 
+
+
 Template.task.helpers({
 isOwner()
 {
   return (this.owner==Meteor.userId());
+},
+pastDueDate()
+{ 
+  if(!this.late){
+    if(moment().subtract(1,'day').isAfter(moment(this.createdAt),))
+    Meteor.call('tasks.isDue',this._id,true);
+  }
+  console.log(this.late);
+  return (this.late);
 },
 }); 
 Template.task.events({

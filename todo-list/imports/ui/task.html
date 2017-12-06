@@ -1,5 +1,5 @@
 <template name="task">
-  <li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}">
+  <li class="{{#if checked}}checked {{else}} {{#if pastDueDate}} late{{/if}}{{/if}} {{#if private}}private{{/if}} ">
     <button class="delete"><span class="glyphicon glyphicon-trash" aria-hidden="true" alt="DELETE"></span></button>
  
     <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
