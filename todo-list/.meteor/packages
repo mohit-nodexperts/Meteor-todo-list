@@ -22,3 +22,5 @@ reactive-dict
 accounts-ui
 accounts-password
 momentjs:moment
+practicalmeteor:mocha
+meteortesting:mocha

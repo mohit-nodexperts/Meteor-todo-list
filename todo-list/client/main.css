@@ -98,7 +98,7 @@ li.checked .text {
  
 li.private {
   background: #eee;
- 
+  border-color: #ddd;
 }
 li.late{
   background: #e09888;
