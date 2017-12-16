@@ -7,12 +7,17 @@ export const Tasks = new Mongo.Collection('tasks');
 
 if(Meteor.isServer)
 {
-	Meteor.publish('tests',function taskspublication(){
+	Meteor.publish('tests',function taskspublication(page,pageSize){
 		return Tasks.find({
 			$or :[{ private : {$ne : true}},
 				{ owner : this.userId },
 			],
-		});
+		},
+	{
+		sort :{createdAt : 1},
+		skip: page > 0 ? ((page) * pageSize) : 0,
+		limit: pageSize,	
+	});
 	});
 }
 
@@ -46,6 +51,12 @@ Meteor.methods({
 		check(taskId, String);
    
 		Tasks.remove(taskId);
+	},
+	/**
+	 * Returns Total number of tasks for Pagination
+	 */
+	'tasks.count'(){
+		return Tasks.find({}).count();
 	},
 	/**
      * Set Check For Check/Uncheck Event

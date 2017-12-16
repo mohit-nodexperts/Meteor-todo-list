@@ -10,10 +10,33 @@ import './task.js';
 
 import './body.html';
 
+import { Session } from 'meteor/session';
+
 Template.body.onCreated(function bodyOnCreated() {
 	this.state = new ReactiveDict();
-	Meteor.subscribe('tests');
+	Session.set('page',0);
+	Session.set('pageSize',5);
+	
+	this.autorun(() => {
+		calculation();
+		this.subscribe('tests',Session.get('page'),Session.get('pageSize'));
+	});
 });
+
+export default function calculation() {
+	Meteor.call('tasks.count', (err, res) => {
+		Session.set('tasks',res);
+	});
+	if(Session.get('tasks')%Session.get('pageSize')==0)
+	{
+		Session.set('pages',Math.floor(Session.get('tasks')/Session.get('pageSize')));
+		if(Session.get('page')==Session.get('pages'))
+		Session.set('page',Session.get('page')-1);
+	}
+	else
+	Session.set('pages',Math.floor(Session.get('tasks')/Session.get('pageSize'))+1);
+	
+};
 
 Template.body.helpers({
 	tasks() {
@@ -31,6 +54,14 @@ Template.body.helpers({
 	completeCount() {
 		return Tasks.find({}).count();
 	},
+	isNext(){
+		return Session.get('page') < Session.get('pages')-1;
+	},
+	isPrev(){
+		if(Session.get('page')> 0)
+		return true
+		return false;
+	},
 });
 Template.body.events({
 	/**
@@ -47,6 +78,9 @@ Template.body.events({
  
 		// Insert a task into the collection
 		Meteor.call('tasks.insert', text);
+
+		Session.set('tasks',Session.get('tasks')+1);
+		calculation();
 		// Clear form
 		target.text.value = '';
 	},
@@ -58,5 +92,13 @@ Template.body.events({
 	'change .hide-completed input'(event, instance) {
 		instance.state.set('hideCompleted', event.target.checked);
 	},
+	'click #prevPage'(event,instance){
+		let val = Session.get('page');
+		Session.set('page',val-1);
+	},
+	'click #nextPage'(event,instance){
+		let val = Session.get('page');
+		Session.set('page',val+1);
+	}
 });
 

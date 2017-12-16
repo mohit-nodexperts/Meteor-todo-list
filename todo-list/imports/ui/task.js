@@ -6,6 +6,9 @@ import { Tasks } from '../api/tasks.js';
  
 import './task.html';
 
+import calculate from '../ui/body.js';
+
+import { Session } from 'meteor/session';
 Template.task.helpers({
 	isOwner()
 	{
@@ -27,6 +30,8 @@ Template.task.events({
 	},
 	'click .delete'() {
 		Meteor.call('tasks.remove', this._id);
+		Session.set('tasks',Session.get('tasks')-1);
+		calculate();
 	},
 	'click .toggle-private'(){
 		Meteor.call('tasks.setPrivate',this._id,! this.private);
