@@ -1,6 +1,8 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
+import { Accounts } from 'meteor/accounts-base';
+import { error } from 'util';
 
 const moment = require('moment');
 export const Tasks = new Mongo.Collection('tasks');
@@ -18,6 +20,17 @@ if(Meteor.isServer)
 		skip: page > 0 ? ((page) * pageSize) : 0,
 		limit: pageSize,	
 	});
+	});
+	Accounts.validateLoginAttempt(function (attempt) {
+		if(!attempt.allowed)
+			return false;
+			console.log(attempt.user.services.resume.loginTokens.length);
+			if(attempt.user.services.resume.loginTokens.length>1)
+			{
+				throw new error("Multiple client login");
+			}
+			else
+			return true;
 	});
 }
 

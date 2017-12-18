@@ -11,6 +11,7 @@ import './task.js';
 import './body.html';
 
 import { Session } from 'meteor/session';
+import { Accounts } from 'meteor/accounts-base';
 
 Template.body.onCreated(function bodyOnCreated() {
 	this.state = new ReactiveDict();
