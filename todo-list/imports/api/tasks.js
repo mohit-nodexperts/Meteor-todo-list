@@ -1,20 +1,19 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
+import { Accounts } from 'meteor/accounts-base';
+import { error } from 'util';
 
 const moment = require('moment');
 export const Tasks = new Mongo.Collection('tasks');
 
 if(Meteor.isServer)
 {
-	Meteor.publish('tests',function taskspublication(){
+	Meteor.publish('tests',function taskspublication(page,pageSize){
 		return Tasks.find({
 			$or :[{ private : {$ne : true}},
 				{ owner : this.userId },
 			],
-<<<<<<< Updated upstream
-		});
-=======
 		},
 	{
 		sort :{createdAt : 1},
@@ -32,7 +31,6 @@ if(Meteor.isServer)
 			}
 			else
 			return attempt.allowed;
->>>>>>> Stashed changes
 	});
 }
 
@@ -66,6 +64,12 @@ Meteor.methods({
 		check(taskId, String);
    
 		Tasks.remove(taskId);
+	},
+	/**
+	 * Returns Total number of tasks for Pagination
+	 */
+	'tasks.count'(){
+		return Tasks.find({}).count();
 	},
 	/**
      * Set Check For Check/Uncheck Event

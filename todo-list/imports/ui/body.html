@@ -6,14 +6,10 @@
         <input type="checkbox" />
         Hide Completed Tasks
       </label>
-<<<<<<< Updated upstream
-      {{> loginButtons}}
-=======
     {{#unless currentUser}}
       {{>login}}
     {{/unless}}
     {{#if currentUser}} {{currentUser.username}} <input type="button" id="signout" value="SignOut" /> {{/if}}
->>>>>>> Stashed changes
     </header>
     {{#if currentUser}}
     <form class="new-task">
@@ -26,5 +22,13 @@
         {{> task}}
       {{/each}}
     </ul>
+    <div>
+      {{#if isPrev}}
+          <input type="button" id="prevPage" value="Previous">
+      {{/if}}
+      {{#if isNext}}
+          <input type="button" id="nextPage" value='Next'>
+      {{/if}}
+    </div>
   </div>
 </body>
