@@ -12,7 +12,27 @@ if(Meteor.isServer)
 			$or :[{ private : {$ne : true}},
 				{ owner : this.userId },
 			],
+<<<<<<< Updated upstream
 		});
+=======
+		},
+	{
+		sort :{createdAt : 1},
+		skip: page > 0 ? ((page) * pageSize) : 0,
+		limit: pageSize,	
+	});
+	});
+	Accounts.validateLoginAttempt(function (attempt) {
+		if(!attempt.allowed)
+			return false;
+			console.log(attempt.user.services.resume.loginTokens.length);
+			if(attempt.user.services.resume.loginTokens.length>1)
+			{
+				throw new Meteor.Error(300,"Multiple client login");
+			}
+			else
+			return attempt.allowed;
+>>>>>>> Stashed changes
 	});
 }
 
@@ -83,5 +103,14 @@ Meteor.methods({
 		check(setDue,Boolean);
 
 		Tasks.update(taskId,{ $set : {late : setDue}});
+	},
+	'update.multilogin'(user) {
+		let u=Meteor.users.find({username:user});
+		if(u.count()>0)
+		{
+			let	us=Meteor.users.find({username:user}).fetch()[0];
+			let token=us.services.resume.loginTokens=[];
+		  return Meteor.users.update({ _id: us._id }, { $set: { 'services.resume.loginTokens': token } });
+		}
 	},
 });

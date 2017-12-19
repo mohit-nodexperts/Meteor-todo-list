@@ -9,6 +9,8 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import './task.js';
 
 import './body.html';
+import './login.html';
+import './login.js';
 
 Template.body.onCreated(function bodyOnCreated() {
 	this.state = new ReactiveDict();
@@ -58,5 +60,19 @@ Template.body.events({
 	'change .hide-completed input'(event, instance) {
 		instance.state.set('hideCompleted', event.target.checked);
 	},
+<<<<<<< Updated upstream
+=======
+	'click #prevPage'(event,instance){
+		let val = Session.get('page');
+		Session.set('page',val-1);
+	},
+	'click #nextPage'(event,instance){
+		let val = Session.get('page');
+		Session.set('page',val+1);
+	},
+	'click #signout'(event){
+		Meteor.logout();
+	}
+>>>>>>> Stashed changes
 });
 
